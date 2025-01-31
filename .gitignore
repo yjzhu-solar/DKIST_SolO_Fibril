@@ -2,6 +2,9 @@
 __pycache__/
 *.py[cod]
 *$py.class
+slurm*.out
+sav/
+figs/
 
 # C extensions
 *.so
