@@ -32,6 +32,9 @@ def job_hrieuv_wow_and_reproject(map_raw, map_wcs, target_wcs, noproj_extent):
     hrieuv_map = NDCube(map_raw.data, map_wcs)
     hrieuv_map_date_ear = map_raw.meta["date_ear"]
     hrieuv_map = hrieuv_map[500:750,1050:1360]
+
+    with propagate_with_solar_surface():
+        hrieuv_map_nowow_reproj = hrieuv_map.reproject_to(target_wcs,algorithm="adaptive")
     
     hrieuv_map = NDCube(wow(hrieuv_map.data, bilateral=1, denoise_coefficients=[5,5],)[0],
                                hrieuv_map.wcs)
@@ -42,7 +45,7 @@ def job_hrieuv_wow_and_reproject(map_raw, map_wcs, target_wcs, noproj_extent):
     with propagate_with_solar_surface():
         hrieuv_map = hrieuv_map.reproject_to(target_wcs,algorithm="adaptive")
     
-    return hrieuv_map.data, hrieuv_map_noproj.data, hrieuv_map_date_ear
+    return hrieuv_map.data, hrieuv_map_noproj.data, hrieuv_map_nowow_reproj.data, hrieuv_map_date_ear
 
 def job_irissji_wow_and_reproject(map_raw, map_wcs, target_wcs):
     """
@@ -54,6 +57,9 @@ def job_irissji_wow_and_reproject(map_raw, map_wcs, target_wcs):
     irissji_map = NDCube(map_raw.data, map_wcs)
     irissji_map_date = map_raw.meta["date-obs"]
     irissji_map = irissji_map[100:300,150:350]
+
+    with propagate_with_solar_surface():
+        irissji_map_nowow_map = irissji_map.reproject_to(target_wcs,algorithm="adaptive")
     
     irissji_map = NDCube(wow(irissji_map.data, bilateral=1, denoise_coefficients=[5,5],)[0],
                                irissji_map.wcs)
@@ -61,7 +67,7 @@ def job_irissji_wow_and_reproject(map_raw, map_wcs, target_wcs):
     with propagate_with_solar_surface():
         irissji_map = irissji_map.reproject_to(target_wcs,algorithm="adaptive")
     
-    return (irissji_map.data, irissji_map_date)
+    return (irissji_map.data, irissji_map_nowow_map.data, irissji_map_date)
 
 def job_aia_wow_and_reproject(map_raw, map_wcs, target_wcs):
     """
@@ -103,10 +109,10 @@ if __name__ == "__main__":
     todo_list = {"Gband":False,
                 "CaIIK":False,
                 "Hbeta":False,
-                "Halpha":True,
-                "TiO":True,
-                "HRIEUV":False,
-                "IRISSJI":False,
+                "Halpha":False,
+                "TiO":False,
+                "HRIEUV":True,
+                "IRISSJI":True,
                 "AIA":False,
                 "VBI_DATE_OBS":False,
                 }
@@ -352,7 +358,11 @@ if __name__ == "__main__":
         with h5py.File("/cluster/home/zhuyin/scratch/pid_1_123_aux/plot_ready/HRIEUV_noproj_pr.hdf5","w") as hf:
             hf.create_dataset('hrieuv_noproj_img', data=hrieuv_noproj_pr_dset)
 
-        hrieuv_date_ear = [r[2] for r in results_hri]
+        hrieuv_nowow_pr_dset = np.array([r[2] for r in results_hri])
+        with h5py.File("/cluster/home/zhuyin/scratch/pid_1_123_aux/plot_ready/HRIEUV_nowow_pr.hdf5","w") as hf:
+            hf.create_dataset('hrieuv_nowow_img', data=hrieuv_nowow_pr_dset)
+
+        hrieuv_date_ear = [r[3] for r in results_hri]
         hrieuv_date_ear_table = Table()
         hrieuv_date_ear_table["date_ear"] = hrieuv_date_ear
         hrieuv_date_ear_table.write("/cluster/home/zhuyin/scratch/pid_1_123_aux/plot_ready/HRIEUV_date_ear.txt",
@@ -360,6 +370,7 @@ if __name__ == "__main__":
 
         del hrieuv_pr_dset
         del hrieuv_noproj_pr_dset
+        del hrieuv_nowow_pr_dset
 
         print("HRIEUV done")
 
@@ -380,13 +391,18 @@ if __name__ == "__main__":
         with h5py.File("/cluster/home/zhuyin/scratch/pid_1_123_aux/plot_ready/IRISSJI_1400_pr.hdf5","w") as hf:
             hf.create_dataset('irissji_1400_img', data=irissji_1400_pr_dset)
 
-        irissji_1400_date_obs = [r[1] for r in results_irissji_1400]
+        irissji_1400_nowow_pr_dset = np.array([r[1] for r in results_irissji_1400])
+        with h5py.File("/cluster/home/zhuyin/scratch/pid_1_123_aux/plot_ready/IRISSJI_1400_nowow_pr.hdf5","w") as hf:
+            hf.create_dataset('irissji_1400_nowow_img', data=irissji_1400_nowow_pr_dset)
+
+        irissji_1400_date_obs = [r[2] for r in results_irissji_1400]
         irissji_1400_date_obs_table = Table()
         irissji_1400_date_obs_table["date_obs"] = irissji_1400_date_obs
         irissji_1400_date_obs_table.write("/cluster/home/zhuyin/scratch/pid_1_123_aux/plot_ready/IRISSJI_1400_date_obs.txt",
                                           format="ascii", overwrite=True)
 
         del irissji_1400_pr_dset
+        del irissji_1400_nowow_pr_dset
 
         print("IRISSJI_1400 done")
 

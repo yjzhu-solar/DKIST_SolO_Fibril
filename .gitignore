@@ -1,3 +1,8 @@
+data/
+euler_jobs/
+figs/
+sav/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

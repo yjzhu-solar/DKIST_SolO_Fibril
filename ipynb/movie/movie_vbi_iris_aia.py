@@ -50,7 +50,7 @@ def plot_vbi_iris_aia(Gband_dset, Gband_date_obs,
 
     ax3 = fig.add_subplot(333, projection=target_wcs_rebin)
     im3 = ax3.imshow(aia171_pr_set[aia171_index_], cmap="sdoaia171")
-    title3 = ax3.set_title(r"SDO/AIA 171 nm {}".format(aia171_date_obs[aia171_index_].strftime("%Y-%m-%dT%H:%M:%S")))
+    title3 = ax3.set_title(r"SDO/AIA 17.1 nm {}".format(aia171_date_obs[aia171_index_].strftime("%Y-%m-%dT%H:%M:%S")))
 
     ax4 = fig.add_subplot(334, projection=target_wcs)
     im4 = ax4.imshow(Halpha_dset[Halpha_index_], cmap="Greys_r",
@@ -60,7 +60,7 @@ def plot_vbi_iris_aia(Gband_dset, Gband_date_obs,
     ax5 = fig.add_subplot(335, projection=target_wcs)
     im5 = ax5.imshow(Hbeta_dset[Hbeta_index_], cmap="Greys_r",
                norm=ImageNormalize(vmin=0, vmax=1))
-    title5 = ax5.set_title(r"DKIST/VBI-R H$\beta$ {}".format(Hbeta_date_obs[Hbeta_index_].strftime("%Y-%m-%dT%H:%M:%S")))
+    title5 = ax5.set_title(r"DKIST/VBI-B H$\beta$ {}".format(Hbeta_date_obs[Hbeta_index_].strftime("%Y-%m-%dT%H:%M:%S")))
         
     ax6 = fig.add_subplot(336, projection=target_wcs_rebin)
     im6 = ax6.imshow(irissji_dset[iris_index_], cmap="irissji1400")
@@ -124,12 +124,12 @@ def plot_vbi_iris_aia(Gband_dset, Gband_date_obs,
 
         titles[0].set_text(r"EUI/HRI$_{{\rm EUV}}$ 17.4 nm {}".format(hrieuv_date_ear[ii].strftime("%Y-%m-%dT%H:%M:%S")))
         titles[1].set_text(r"Reproj. EUI/HRI$_{{\rm EUV}}$ 17.4 nm {}".format(hrieuv_date_ear[ii].strftime("%Y-%m-%dT%H:%M:%S")))
-        titles[2].set_text(r"SDO/AIA 171 nm {}".format(aia171_date_obs[aia171_index_].strftime("%Y-%m-%dT%H:%M:%S")))
+        titles[2].set_text(r"SDO/AIA 17.1 nm {}".format(aia171_date_obs[aia171_index_].strftime("%Y-%m-%dT%H:%M:%S")))
         titles[3].set_text(r"DKIST/VBI-R H$\alpha$ {}".format(Halpha_date_obs[Halpha_index_].strftime("%Y-%m-%dT%H:%M:%S")))
-        titles[4].set_text(r"DKIST/VBI-R H$\beta$ {}".format(Hbeta_date_obs[Hbeta_index_].strftime("%Y-%m-%dT%H:%M:%S")))
+        titles[4].set_text(r"DKIST/VBI-B H$\beta$ {}".format(Hbeta_date_obs[Hbeta_index_].strftime("%Y-%m-%dT%H:%M:%S")))
         titles[5].set_text(r"IRIS/SJI 140.0 nm {}".format(irissji_date_obs[iris_index_].strftime("%Y-%m-%dT%H:%M:%S")))
-        titles[6].set_text(r"DKIST/VBI-R Gband {}".format(Gband_date_obs[Gband_index_].strftime("%Y-%m-%dT%H:%M:%S")))
-        titles[7].set_text(r"DKIST/VBI-R CaIIK {}".format(CaIIK_date_obs[CaIIK_index_].strftime("%Y-%m-%dT%H:%M:%S")))
+        titles[6].set_text(r"DKIST/VBI-B Gband {}".format(Gband_date_obs[Gband_index_].strftime("%Y-%m-%dT%H:%M:%S")))
+        titles[7].set_text(r"DKIST/VBI-B Ca II K {}".format(CaIIK_date_obs[CaIIK_index_].strftime("%Y-%m-%dT%H:%M:%S")))
         titles[8].set_text(r"DKIST/VBI-R TiO {}".format(TiO_date_obs[TiO_index_].strftime("%Y-%m-%dT%H:%M:%S")))
     
     anim = animation.FuncAnimation(fig, update_fig, frames=range(len(hrieuv_date_ear)), #range(0,5), 
@@ -175,9 +175,6 @@ if __name__ == "__main__":
     Halpha_pr_set = file_Halpha_pr["vbi_img"]
     Halpha_pr_da = da.from_array(Halpha_pr_set, chunks=(1, 4096 - 128*2, 4096 - 128*2))
     Halpha_date_obs = Time(ascii.read("/cluster/scratch/zhuyin/pid_1_123_aux/plot_ready/Halpha_BLZNL_date_avg.txt")["DATE-AVG"])
-
-
-    plt.imshow(Gband_pr_da[0,:,:], origin="lower")
 
 
     file_hri_pr_dset = h5py.File("/cluster/scratch/zhuyin/pid_1_123_aux/plot_ready/HRIEUV_pr.hdf5")
