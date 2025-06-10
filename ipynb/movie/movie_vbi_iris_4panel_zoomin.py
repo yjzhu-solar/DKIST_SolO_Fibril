@@ -28,24 +28,24 @@ def plot_vbi_iris(Hbeta_dset, Hbeta_date_obs,
     Hbeta_index_ = np.nanargmin(np.abs(hrieuv_date_ear[0] - Hbeta_date_obs))
 
     ax1 = fig.add_subplot(221, projection=target_wcs_rebin)
-    im1 = ax1.imshow(hri_dset[0], cmap="sdoaia171",
-            vmin=np.nanpercentile(hri_pr_da[0,:,:].compute(), 0.1),
-            vmax=np.nanpercentile(hri_pr_da[0,:,:].compute(), 99.9), interpolation="none")
+    im1 = ax1.imshow(hri_dset[0].compute(), cmap="sdoaia171",
+            vmin=np.nanpercentile(hri_dset[0,:,:].compute(), 0.1),
+            vmax=np.nanpercentile(hri_dset[0,:,:].compute(), 99.9), interpolation="none")
     title1 = ax1.set_title(r"Reproj. EUI/HRI$_{{\rm EUV}}$ 17.4 nm {}".format(hrieuv_date_ear[0].strftime("%Y-%m-%dT%H:%M:%S")))
 
     ax2 = fig.add_subplot(222, projection=target_wcs_rebin)
-    im2 = ax2.imshow(irissji_dset[iris_index_], cmap="irissji1400",
-            vmin=np.nanpercentile(irissji_pr_da[0,:,:].compute(), 1),
-            vmax=np.nanpercentile(irissji_pr_da[0,:,:].compute(), 99), interpolation="none")
+    im2 = ax2.imshow(irissji_dset[iris_index_].compute(), cmap="irissji1400",
+            vmin=np.nanpercentile(irissji_dset[0,:,:].compute(), 1),
+            vmax=np.nanpercentile(irissji_dset[0,:,:].compute(), 99), interpolation="none")
     title2 = ax2.set_title(r"IRIS/SJI 140.0 nm {}".format(irissji_date_obs[iris_index_].strftime("%Y-%m-%dT%H:%M:%S")))
 
     ax3 = fig.add_subplot(223, projection=target_wcs)
-    im3 = ax3.imshow(Halpha_dset[Halpha_index_], cmap="Greys_r",
+    im3 = ax3.imshow(Halpha_dset[Halpha_index_].compute(), cmap="Greys_r",
                norm=ImageNormalize(vmin=0, vmax=1, stretch=AsinhStretch(0.6)), interpolation="none")
     title3 = ax3.set_title(r"DKIST/VBI-R H$\alpha$ {}".format(Halpha_date_obs[Halpha_index_].strftime("%Y-%m-%dT%H:%M:%S")))
 
     ax4 = fig.add_subplot(224, projection=target_wcs)
-    im4 = ax4.imshow(Hbeta_dset[Hbeta_index_], cmap="Greys_r",
+    im4 = ax4.imshow(Hbeta_dset[Hbeta_index_].compute(), cmap="Greys_r",
                norm=ImageNormalize(vmin=0, vmax=1), interpolation="none")
     title4 = ax4.set_title(r"DKIST/VBI-B H$\beta$ {}".format(Hbeta_date_obs[Hbeta_index_].strftime("%Y-%m-%dT%H:%M:%S")))
 
@@ -73,16 +73,19 @@ def plot_vbi_iris(Hbeta_dset, Hbeta_date_obs,
         Hbeta_index_ = np.nanargmin(np.abs(hrieuv_date_ear[ii] - Hbeta_date_obs))
 
         ims[0].set_data(hri_dset[ii].compute() if hasattr(hri_dset[ii], 'compute') else hri_dset[ii])
-        ims[1].set_data(irissji_dset[iris_index_] if hasattr(irissji_dset[iris_index_], 'compute') else irissji_dset[iris_index_])
-        ims[2].set_data(Halpha_dset[Halpha_index_] if hasattr(Halpha_dset[Halpha_index_], 'compute') else Halpha_dset[Halpha_index_])
-        ims[3].set_data(Hbeta_dset[Hbeta_index_] if hasattr(Hbeta_dset[Hbeta_index_], 'compute') else Hbeta_dset[Hbeta_index_])
+        ims[1].set_data(irissji_dset[iris_index_].compute() if hasattr(irissji_dset[iris_index_], 'compute') else irissji_dset[iris_index_])
+        ims[2].set_data(Halpha_dset[Halpha_index_].compute() if hasattr(Halpha_dset[Halpha_index_], 'compute') else Halpha_dset[Halpha_index_])
+        ims[3].set_data(Hbeta_dset[Hbeta_index_].compute() if hasattr(Hbeta_dset[Hbeta_index_], 'compute') else Hbeta_dset[Hbeta_index_])
 
         titles[0].set_text(r"Reproj. EUI/HRI$_{{\rm EUV}}$ 17.4 nm {}".format(hrieuv_date_ear[ii].strftime("%Y-%m-%dT%H:%M:%S")))
         titles[1].set_text(r"IRIS/SJI 140.0 nm {}".format(irissji_date_obs[iris_index_].strftime("%Y-%m-%dT%H:%M:%S")))
         titles[2].set_text(r"DKIST/VBI-R H$\alpha$ {}".format(Halpha_date_obs[Halpha_index_].strftime("%Y-%m-%dT%H:%M:%S")))
         titles[3].set_text(r"DKIST/VBI-B H$\beta$ {}".format(Hbeta_date_obs[Hbeta_index_].strftime("%Y-%m-%dT%H:%M:%S")))
 
-    anim = animation.FuncAnimation(fig, update_fig, frames=range(len(hrieuv_date_ear)), #range(130,140), #
+        if ii%20 == 0:
+            print("finished frame {}".format(ii))
+
+    anim = animation.FuncAnimation(fig, update_fig, frames=range(len(hrieuv_date_ear)), #range(0,50), #
                                    fargs=(fig, (im1, im2, im3, im4),
                                           (ax1, ax2, ax3, ax4),
                                           (title1, title2, title3, title4),
@@ -92,7 +95,10 @@ def plot_vbi_iris(Hbeta_dset, Hbeta_date_obs,
                                           irissji_dset, irissji_date_obs),
                                           blit=False)
     
-    anim.save(save_dir, fps=30, dpi=300)
+    anim.save(save_dir, fps=30, dpi=150,writer='ffmpeg', 
+          codec='libx264',
+          # bitrate=6000,
+          extra_args=['-pix_fmt', 'yuv420p'])
 
 
 if __name__ == "__main__":
@@ -140,7 +146,7 @@ if __name__ == "__main__":
                   save_dir="/cluster/home/zhuyin/Solar/DKIST_SolO_Fibril/figs/movie/movie_vbi_iris_4panels_zoomin_1.mp4",
                   figsize=(11,11))
 
-    print("finished 1")
+    print("----------------finished 1----------------")
 
     xstart_2 = 1600
     xend_2 = 2200
@@ -156,7 +162,7 @@ if __name__ == "__main__":
                   save_dir="/cluster/home/zhuyin/Solar/DKIST_SolO_Fibril/figs/movie/movie_vbi_iris_4panels_zoomin_2.mp4",
                   figsize=(11,11))
 
-    print("finished 2")
+    print("----------------finished 2----------------")
 
     xstart_3 = 0
     xend_3 = 800
@@ -172,7 +178,7 @@ if __name__ == "__main__":
                   save_dir="/cluster/home/zhuyin/Solar/DKIST_SolO_Fibril/figs/movie/movie_vbi_iris_4panels_zoomin_3.mp4",
                   figsize=(11,11))
 
-    print("finished 3")
+    print("----------------finished 3----------------")
 
     xstart_4 = 2200
     xend_4 = 2800
@@ -188,10 +194,10 @@ if __name__ == "__main__":
                   save_dir="/cluster/home/zhuyin/Solar/DKIST_SolO_Fibril/figs/movie/movie_vbi_iris_4panels_zoomin_4.mp4",
                   figsize=(11,11))
     
-    print("finished 4")
+    print("----------------finished 4----------------")
 
 
 
 
-        
-        
+      
+      
