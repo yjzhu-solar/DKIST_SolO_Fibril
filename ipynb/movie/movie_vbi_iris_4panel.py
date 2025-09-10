@@ -91,10 +91,10 @@ def plot_vbi_iris(Hbeta_dset, Hbeta_date_obs,
 
 if __name__ == "__main__":
 
-    file_Hbeta_pr = h5py.File("/cluster/scratch/zhuyin/pid_1_123_aux/plot_ready/Hbeta_BJOLO_pr.hdf5")
-    Hbeta_pr_set = file_Hbeta_pr["vbi_img"]
-    Hbeta_pr_da = da.from_array(Hbeta_pr_set, chunks=(1, 4096 - 128*2, 4096 - 128*2))
-    Hbeta_date_obs = Time(ascii.read("/cluster/scratch/zhuyin/pid_1_123_aux/plot_ready/Hbeta_BJOLO_date_avg.txt")["DATE-AVG"])
+    # file_Hbeta_pr = h5py.File("/cluster/scratch/zhuyin/pid_1_123_aux/plot_ready/Hbeta_BJOLO_pr.hdf5")
+    # Hbeta_pr_set = file_Hbeta_pr["vbi_img"]
+    # Hbeta_pr_da = da.from_array(Hbeta_pr_set, chunks=(1, 4096 - 128*2, 4096 - 128*2))
+    # Hbeta_date_obs = Time(ascii.read("/cluster/scratch/zhuyin/pid_1_123_aux/plot_ready/Hbeta_BJOLO_date_avg.txt")["DATE-AVG"])
 
     file_Hbeta_pr = h5py.File("/cluster/scratch/zhuyin/pid_1_123_aux/plot_ready/Hbeta_BJOLO_pr.hdf5")
     Hbeta_pr_set = file_Hbeta_pr["vbi_img"]
