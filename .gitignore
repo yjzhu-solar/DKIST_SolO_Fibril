@@ -2,6 +2,7 @@ data/
 euler_jobs/
 figs/
 sav/
+*.jbl
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

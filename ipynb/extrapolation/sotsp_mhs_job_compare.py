@@ -53,44 +53,68 @@ data2d = Field2dData(
     flux_balance_state=FluxBalanceState.UNBALANCED,
 )
 
+# data3d = calculate_magfield(
+#     data2d,
+#     alpha=0.004474636432624906,
+#     a=0.2,
+#     which_solution=WhichSolution.ASYMP,
+#     b=1.0,
+#     z0=2.0,
+#     deltaz=0.2,
+# )
+
+# print("finished 1")
+
+# data3d.save(path="/cluster/home/zhuyin/Solar/DKIST_SolO_Fibril/data/pid_1_123_aux/MHSXtra_results/SOTSP_test_full_v2/")
+
+# data3d = calculate_magfield(
+#     data2d,
+#     alpha=0.01,
+#     a=0.2,
+#     which_solution=WhichSolution.ASYMP,
+#     b=1.0,
+#     z0=2.0,
+#     deltaz=0.2,
+# )
+
+# data3d.save(path="/cluster/home/zhuyin/Solar/DKIST_SolO_Fibril/data/pid_1_123_aux/MHSXtra_results/SOTSP_test_full_pos_alpha/")
+
+# print("finished 2")
+
+# data3d = calculate_magfield(
+#     data2d,
+#     alpha=-0.01,
+#     a=0.2,
+#     which_solution=WhichSolution.ASYMP,
+#     b=1.0,
+#     z0=2.0,
+#     deltaz=0.2,
+# )
+
+# data3d.save(path="/cluster/home/zhuyin/Solar/DKIST_SolO_Fibril/data/pid_1_123_aux/MHSXtra_results/SOTSP_test_full_neg_alpha/")
+
+# print("finished 3")
+
+# data3d = calculate_magfield(
+#     data2d,
+#     alpha=0,
+#     a=0.2,
+#     which_solution=WhichSolution.ASYMP,
+#     b=1.0,
+#     z0=2.0,
+#     deltaz=0.2,
+# )
+
+# data3d.save(path="/cluster/home/zhuyin/Solar/DKIST_SolO_Fibril/data/pid_1_123_aux/MHSXtra_results/SOTSP_test_full_zero_alpha/")
+
 data3d = calculate_magfield(
     data2d,
-    alpha=0.004474636432624906,
-    a=0.2,
+    alpha=0,
+    a=0.,
     which_solution=WhichSolution.ASYMP,
     b=1.0,
     z0=2.0,
     deltaz=0.2,
 )
 
-print("finished 1")
-
-data3d.save(path="/cluster/home/zhuyin/Solar/DKIST_SolO_Fibril/data/pid_1_123_aux/MHSXtra_results/SOTSP_test_full_v2/")
-
-data3d = calculate_magfield(
-    data2d,
-    alpha=0.01,
-    a=0.2,
-    which_solution=WhichSolution.ASYMP,
-    b=1.0,
-    z0=2.0,
-    deltaz=0.2,
-)
-
-data3d.save(path="/cluster/home/zhuyin/Solar/DKIST_SolO_Fibril/data/pid_1_123_aux/MHSXtra_results/SOTSP_test_full_pos_alpha/")
-
-print("finished 2")
-
-data3d = calculate_magfield(
-    data2d,
-    alpha=-0.01,
-    a=0.2,
-    which_solution=WhichSolution.ASYMP,
-    b=1.0,
-    z0=2.0,
-    deltaz=0.2,
-)
-
-data3d.save(path="/cluster/home/zhuyin/Solar/DKIST_SolO_Fibril/data/pid_1_123_aux/MHSXtra_results/SOTSP_test_full_neg_alpha/")
-
-print("finished 3")
+data3d.save(path="/cluster/home/zhuyin/Solar/DKIST_SolO_Fibril/data/pid_1_123_aux/MHSXtra_results/SOTSP_test_full_potential/")
